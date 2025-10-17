@@ -1,89 +1,106 @@
-body {
-  padding: 0;
-  margin: 0;
+:root {
+  --field-gap: 2rem;
+
+  --cell-size: 3rem;
+  --cell-border-size: max(calc(var(--cell-size) / 16), 1.5px);
+  --cell-background-color: oklch(20% 0 0);
+  --cell-border-color: oklch(30% 0 0);
+
+  --hand-color: oklch(94.75% 0.1916 119.15);
 }
 
-*,
-*::before,
-*::after {
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-.app {
-  --clock-size: 3vw;
-  --gap: calc(var(--clock-size) * 0.05);
-  --clock-segment-w: calc(var(--clock-size) * 4 + var(--gap) * 5);
-  --clock-segment-h: calc(var(--clock-size) * 6 + var(--gap) * 5);
-  font-family: sans-serif;
-  text-align: center;
-  display: flex;
-  gap: var(--gap);
-  align-items: center;
-  justify-content: center;
+body {
+  background-color: oklch(0% 0 0);
+}
+
+#app {
   height: 100vh;
-  padding-left: calc(var(--clock-size) + var(--gap) * 2);
-}
-
-.app > div {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-  width: var(--clock-segment-w);
-  height: var(--clock-segment-h);
-}
-
-.app > div:nth-of-type(even) {
-  margin-right: var(--clock-size);
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .clock {
-  --w: 47%;
-  --h: 3px;
-  --dur: 0.4s;
+  display: flex;
+  gap: var(--field-gap);
+}
+
+.clock > .pair {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.digit {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 0.125rem;
+}
+
+.cell {
+  height: var(--cell-size);
+  width: var(--cell-size);
   position: relative;
-  width: var(--clock-size);
-  height: var(--clock-size);
-  border-radius: 50%;
-  flex-shrink: 0;
-  border: 2px solid white;
-  background: linear-gradient(225deg, #d0d0d0 10%, white);
-  box-shadow: -2px 2px 6px #d0d0d0,
-               2px -2px 6px #ffffff;
+  background-color: var(--cell-background-color);
+  border: var(--cell-border-size) solid var(--cell-border-color);
+  border-radius: 1000px;
 }
 
-.clock::before,
-.clock::after {
+.cell > .hand {
+  width: 50%;
+  height: var(--cell-border-size);
+  background-color: var(--hand-color);
   position: absolute;
-  content: '';
-  top: calc(50% - var(--h) * 0.5);
+  transform-origin: center left;
+  top: 50%;
   left: 50%;
-  transform-origin: 0% 50%;
-  width: var(--w);
-  height: var(--h);
-  background: black;
-  border-radius: 9999px;
-  transition: calc(var(--dur) * 1s) ease-in-out;
-  transform: rotate(calc(var(--angle) * 1deg));
+  translate: 0% -50%;
+  rotate: 135deg;
+  transition: rotate 250ms;
 }
 
-.clock::before {
-  --angle: var(--hour-angle);
+.cell > .dot {
+  width: var(--cell-border-size);
+  height: var(--cell-border-size);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  background-color: var(--hand-color);
+  border-radius: 1000px;
 }
 
-.clock::after {
-  --angle: var(--minute-angle);
-}
-
-@media (max-width: 700px) {
-  .clock {
-    --h: 2px;
-    border: 1px solid white;
+@media (max-width: 1440px) {
+  :root {
+    --cell-size: 2rem;
   }
 }
 
-@media (max-width: 500px) {
-  .clock {
-    --h: 1px;
-    --w: 50%;
+@media (max-width: 1024px) {
+  :root {
+    --field-gap: 1rem;
+
+    --cell-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --field-gap: 0.5rem;
+
+    --cell-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --cell-size: 0.75rem;
   }
 }
